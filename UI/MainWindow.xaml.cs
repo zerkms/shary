@@ -22,7 +22,7 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Fullscreen _fullscreenWindow;
+        private Screenshot.Fullscreen _fullscreenWindow;
 
         public MainWindow()
         {
@@ -31,64 +31,14 @@ namespace UI
 
         public void ShowFullscreenWindow()
         {
-            if (_fullscreenWindow == null || !_fullscreenWindow.IsLoaded) _fullscreenWindow = new Fullscreen();
+            if (_fullscreenWindow == null || !_fullscreenWindow.IsLoaded) _fullscreenWindow = new Screenshot.Fullscreen();
 
-            this.WindowState = System.Windows.WindowState.Minimized;
-
-            var scr = TakeAScreenshot();
-            _fullscreenWindow.SetImage(scr);
-
-            _fullscreenWindow.Show();
-            _fullscreenWindow.Activate();
+            _fullscreenWindow.TakeScreenshot();
         }
 
         private void TakeScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
             ShowFullscreenWindow();
         }
-
-        private BitmapSource TakeAScreenshot()
-        {
-            System.Threading.Thread.Sleep(300);
-
-            BitmapSource filteredImage;
-
-            using (var bitmap = new Bitmap(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)))
-            {
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                    graphics.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)));
-                }
-                filteredImage = ToBitmapSource(bitmap);
-            }
-
-            return filteredImage;
-        }
-
-        public static BitmapSource ToBitmapSource(System.Drawing.Bitmap source)
-        {
-            var hBitmap = source.GetHbitmap();
-
-            try
-            {
-                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    hBitmap,
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-            }
-            catch (Win32Exception)
-            {
-                return null;
-            }
-            finally
-            {
-                DeleteObject(hBitmap);
-            }
-        }
-
-        [DllImport("gdi32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool DeleteObject(IntPtr hObject);
     }
 }

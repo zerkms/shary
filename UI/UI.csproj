@@ -57,10 +57,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Fullscreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,9 +64,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Fullscreen.xaml.cs">
-      <DependentUpon>Fullscreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\HotKey.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -104,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\shary.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Screenshot\Screenshot.csproj">
+      <Project>{89A96029-5157-4DE6-966F-607449956602}</Project>
+      <Name>Screenshot</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
