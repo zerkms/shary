@@ -13,7 +13,7 @@ namespace UI
     /// </summary>
     public partial class App : Application
     {
-        private HotKey _hotKey;
+        private HotKey _sshHotkey;
         private System.Windows.Forms.NotifyIcon _niNotifyIcon;
         private System.Windows.Forms.ContextMenuStrip _mnuStripMenu;
 
@@ -57,13 +57,12 @@ namespace UI
 
         private void InitializeHotKeys()
         {
-            _hotKey = new HotKey(ModifierKeys.Control | ModifierKeys.Alt, System.Windows.Forms.Keys.Z);
-            
-            _hotKey.HotKeyPressed += (k) => ((MainWindow)this.MainWindow).ShowFullscreenWindow();
+            _sshHotkey = new HotKey(ModifierKeys.Alt | ModifierKeys.Shift, System.Windows.Forms.Keys.R);
+            _sshHotkey.HotKeyPressed += k => ((MainWindow)this.MainWindow).ShowFullscreenWindow();
 
             Exit += (s, e) =>
             {
-                _hotKey.Dispose();
+                _sshHotkey.Dispose();
             };
         }
 
