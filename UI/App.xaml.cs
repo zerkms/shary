@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Threading;
 
 namespace UI
 {
@@ -16,9 +17,11 @@ namespace UI
         private HotKey _sshHotkey;
         private System.Windows.Forms.NotifyIcon _niNotifyIcon;
         private System.Windows.Forms.ContextMenuStrip _mnuStripMenu;
+        private Mutex _singleInstanceMutex;
 
         public App()
         {
+            SingleInstanceCheck();
             InitializeHotKeys();
             InitializeComponent();
             InitializeTrayIcon();
@@ -66,5 +69,25 @@ namespace UI
             };
         }
 
+        private void SingleInstanceCheck()
+        {
+            _singleInstanceMutex = new Mutex(false, "Shary");
+
+            var hasSignal = _singleInstanceMutex.WaitOne(1000, false);
+
+            if (hasSignal)
+            {
+                Exit += (s, e) =>
+                {
+                    _singleInstanceMutex.ReleaseMutex();
+                    _singleInstanceMutex.Dispose();
+                };
+            }
+            else
+            {
+                MessageBox.Show("Shary is already running", "Shary", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+        }
     }
 }

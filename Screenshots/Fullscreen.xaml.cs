@@ -26,7 +26,6 @@ namespace Screenshots
     {
         private FindWindows.WindowsCollection _windows;
         private FindWindows.Window _currentWindow;
-        private int _currentWindowFrame;
         private SD.Bitmap _imageBitmap;
         private IStorage _storage;
 
