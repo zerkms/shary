@@ -15,6 +15,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
+using Hotkeys;
+using System.Windows.Forms;
+
 namespace UI
 {
     /// <summary>
@@ -23,10 +26,17 @@ namespace UI
     public partial class MainWindow : Window
     {
         private Screenshots.Fullscreen _fullscreenWindow;
+        private HotKey _sshHotkey;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += (s, e) =>
+                {
+                    _sshHotkey = new HotKey(ModifierKeys.Alt | ModifierKeys.Shift, Keys.R, this);
+                    _sshHotkey.HotKeyPressed += k => ShowFullscreenWindow();
+                };
         }
 
         public void ShowFullscreenWindow()
