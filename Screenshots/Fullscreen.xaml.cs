@@ -143,26 +143,20 @@ namespace Screenshots
             WindowFrame.Margin = new Thickness(window.Position.X, window.Position.Y, 0, 0);
 
             if (WindowFrame.Visibility != Visibility.Visible) WindowFrame.Visibility = Visibility.Visible;
-
-
         }
 
         private void Window_MouseUp(object sender, MouseEventArgs e)
         {
-            var window = _windows.Find(e.GetPosition(ScreenshotImage));
-
             SD.Rectangle cropRect = new SD.Rectangle(0, 0, Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
-
-
-            SD.Bitmap src = _imageBitmap;
 
             SD.Bitmap target = new SD.Bitmap(cropRect.Width, cropRect.Height);
 
             using (SD.Graphics g = SD.Graphics.FromImage(target))
             {
-                g.DrawImage(src, cropRect,
-                                new SD.Rectangle(Convert.ToInt32(window.Position.X), Convert.ToInt32(window.Position.Y), target.Width, target.Height),
-                                SD.GraphicsUnit.Pixel);
+                g.DrawImage(_imageBitmap,
+                            cropRect,
+                            new SD.Rectangle(Convert.ToInt32(_currentWindow.Position.X), Convert.ToInt32(_currentWindow.Position.Y), target.Width, target.Height),
+                            SD.GraphicsUnit.Pixel);
             }
 
 
@@ -171,7 +165,7 @@ namespace Screenshots
             croppedScreenshot.Width = WindowFrame.Width;
             croppedScreenshot.Height = WindowFrame.Height;
 
-            croppedScreenshot.Margin = new Thickness(window.Position.X, window.Position.Y, 0, 0);
+            croppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
 
             target.Dispose();
         }
