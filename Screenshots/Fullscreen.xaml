@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Shary: Fullscreen" Height="300" Width="300" WindowStyle="None" WindowState="Maximized" AllowsTransparency="True" Background="Transparent" Loaded="Window_Loaded" ResizeMode="NoResize" Topmost="True" ShowInTaskbar="False"
-        KeyUp="KeyHandler" LostFocus="Window_LostFocus" Deactivated="Window_LostFocus" MouseMove="Window_MouseMove">
+        KeyUp="KeyHandler" LostFocus="Window_LostFocus" Deactivated="Window_LostFocus" MouseMove="Window_MouseMove" MouseUp="Window_MouseUp">
     <Grid>
         <Image HorizontalAlignment="Left" Visibility="Hidden" Name="ScreenshotImage" VerticalAlignment="Top" Stretch="None" />
         <Rectangle Width="1284" Height="1024" Name="ForegroundRect" Opacity="0.7" Margin="0">
@@ -11,5 +11,6 @@
             </Rectangle.Fill>
         </Rectangle>
         <Rectangle Name="WindowFrame" Opacity="1" Visibility="Hidden" StrokeThickness="2" Stroke="LightSkyBlue" RadiusX="2" RadiusY="2" VerticalAlignment="Top" HorizontalAlignment="Left"></Rectangle>
+        <Image Name="croppedScreenshot"  Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" />
     </Grid>
 </Window>

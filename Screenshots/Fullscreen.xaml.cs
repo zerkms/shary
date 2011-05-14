@@ -14,6 +14,7 @@ using System.Windows.Threading;
 
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using SD = System.Drawing;
 
 namespace Screenshots
 {
@@ -25,6 +26,7 @@ namespace Screenshots
         private FindWindows.WindowsCollection _windows;
         private FindWindows.Window _currentWindow;
         private int _currentWindowFrame;
+        private SD.Bitmap _imageBitmap;
 
         public Fullscreen()
         {
@@ -32,6 +34,11 @@ namespace Screenshots
 
             ForegroundRect.Width = SystemParameters.PrimaryScreenWidth;
             ForegroundRect.Height = SystemParameters.PrimaryScreenHeight;
+
+            Closed += (e, s) =>
+            {
+                _imageBitmap.Dispose();
+            };
         }
 
         private void KeyHandler(object sender, KeyEventArgs e)
@@ -45,6 +52,11 @@ namespace Screenshots
         public void SetImage(BitmapSource img)
         {
             ScreenshotImage.Source = img;
+        }
+
+        public ImageSource GetImage()
+        {
+            return ScreenshotImage.Source;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -64,14 +76,13 @@ namespace Screenshots
         {
             BitmapSource filteredImage;
 
-            using (var bitmap = new System.Drawing.Bitmap(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)))
+            _imageBitmap = new System.Drawing.Bitmap(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight));
+
+            using (var graphics = System.Drawing.Graphics.FromImage(_imageBitmap))
             {
-                using (var graphics = System.Drawing.Graphics.FromImage(bitmap))
-                {
-                    graphics.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)));
-                }
-                filteredImage = ToBitmapSource(bitmap);
+                graphics.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)));
             }
+            filteredImage = ToBitmapSource(_imageBitmap);
 
             return filteredImage;
         }
@@ -132,6 +143,37 @@ namespace Screenshots
             WindowFrame.Margin = new Thickness(window.Position.X, window.Position.Y, 0, 0);
 
             if (WindowFrame.Visibility != Visibility.Visible) WindowFrame.Visibility = Visibility.Visible;
+
+
+        }
+
+        private void Window_MouseUp(object sender, MouseEventArgs e)
+        {
+            var window = _windows.Find(e.GetPosition(ScreenshotImage));
+
+            SD.Rectangle cropRect = new SD.Rectangle(0, 0, Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
+
+
+            SD.Bitmap src = _imageBitmap;
+
+            SD.Bitmap target = new SD.Bitmap(cropRect.Width, cropRect.Height);
+
+            using (SD.Graphics g = SD.Graphics.FromImage(target))
+            {
+                g.DrawImage(src, cropRect,
+                                new SD.Rectangle(Convert.ToInt32(window.Position.X), Convert.ToInt32(window.Position.Y), target.Width, target.Height),
+                                SD.GraphicsUnit.Pixel);
+            }
+
+
+
+            croppedScreenshot.Source = ToBitmapSource(target);
+            croppedScreenshot.Width = WindowFrame.Width;
+            croppedScreenshot.Height = WindowFrame.Height;
+
+            croppedScreenshot.Margin = new Thickness(window.Position.X, window.Position.Y, 0, 0);
+
+            target.Dispose();
         }
     }
 }
