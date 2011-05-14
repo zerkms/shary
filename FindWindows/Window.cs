@@ -27,5 +27,10 @@ namespace FindWindows
 
             _bottomRight = new Point(_position.X + _size.Width, _position.Y + _size.Height);
         }
+
+        public void BringToTop()
+        {
+            Winapi.BringWindowToTop(_hwnd);
+        }
     }
 }
