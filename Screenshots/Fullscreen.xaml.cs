@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using SD = System.Drawing;
 using Storages.Interfaces;
+using Screenshots.Events;
 
 namespace Screenshots
 {
@@ -26,12 +27,12 @@ namespace Screenshots
     {
         private FindWindows.WindowsCollection _windows;
         private FindWindows.Window _currentWindow;
+        private FindWindows.Window _capturedWindow;
         private SD.Bitmap _imageBitmap;
-        private IStorage _storage;
+        public event EventHandler<CapturedScreenshotEventArgs> Captured;
 
-        public Fullscreen(IStorage storage)
+        public Fullscreen()
         {
-            _storage = storage;
             InitializeComponent();
 
             ForegroundRect.Width = SystemParameters.PrimaryScreenWidth;
@@ -52,34 +53,43 @@ namespace Screenshots
                     break;
                 case Key.Space:
                 case Key.Enter:
-                    if (CroppedScreenshot.Visibility != Visibility.Hidden && _currentWindow != null) _currentWindow.BringToTop();
-                    this.StoreScreenshot();
-                    this.Close();
+                    if (CroppedScreenshot.Visibility != Visibility.Hidden && _capturedWindow != null)
+                    {
+                        if (FindWindows.Window.IsDropShadowEnabled)
+                        {
+                            FindWindows.Window.DisableDropShadow();
+                        }
+                        this.CaptureScreenshot();
+                        if (FindWindows.Window.IsDropShadowEnabled)
+                        {
+                            FindWindows.Window.EnableDropShadow();
+                        }
+                        this.Close();
+                    }
                     break;
                 default:
                     break;
             }
         }
 
-        private void StoreScreenshot()
+        protected void OnCaptured(CapturedScreenshotEventArgs e)
         {
-            int x = 0, y = 0, width = 0, height = 0;
-            BitmapSource bitmap;
+            EventHandler<CapturedScreenshotEventArgs> handler = this.Captured;
+            if (handler != null)
+                handler(this, e);
+        }
 
-            if (CroppedScreenshot.Visibility == Visibility.Hidden)
-            {
-                bitmap = ToBitmapSource(_imageBitmap);
-            }
-            else
-            {
-                x = Convert.ToInt32(CroppedScreenshot.Margin.Left);
-                y = Convert.ToInt32(CroppedScreenshot.Margin.Top);
-                width = Convert.ToInt32(CroppedScreenshot.Width);
-                height = Convert.ToInt32(CroppedScreenshot.Height);
-                bitmap = TakeAScreenshot(x, y, width, height);
-            }
+        private void CaptureScreenshot()
+        {
+            int x = Convert.ToInt32(CroppedScreenshot.Margin.Left);
+            int y = Convert.ToInt32(CroppedScreenshot.Margin.Top);
+            int width = Convert.ToInt32(CroppedScreenshot.Width);
+            int height = Convert.ToInt32(CroppedScreenshot.Height);
 
-            _storage.Store(bitmap);
+            _capturedWindow.BringToTop();
+
+            BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
+            OnCaptured(new CapturedScreenshotEventArgs(bitmap));
         }
 
         public void SetImage(BitmapSource img)
@@ -114,11 +124,11 @@ namespace Screenshots
         {
             BitmapSource filteredImage;
 
-            _imageBitmap = new System.Drawing.Bitmap(width, height);
+            _imageBitmap = new SD.Bitmap(width, height);
 
-            using (var graphics = System.Drawing.Graphics.FromImage(_imageBitmap))
+            using (var graphics = SD.Graphics.FromImage(_imageBitmap))
             {
-                graphics.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(width, height));
+                graphics.CopyFromScreen(x, y, 0, 0, new SD.Size(width, height));
             }
             filteredImage = ToBitmapSource(_imageBitmap);
 
@@ -131,7 +141,7 @@ namespace Screenshots
             _windows = searcher.Find();
         }
 
-        public static BitmapSource ToBitmapSource(System.Drawing.Bitmap source)
+        public static BitmapSource ToBitmapSource(SD.Bitmap source)
         {
             var hBitmap = source.GetHbitmap();
 
@@ -185,6 +195,8 @@ namespace Screenshots
 
         private void Window_MouseUp(object sender, MouseEventArgs e)
         {
+            int x = Convert.ToInt32(_currentWindow.Position.X);
+            int y = Convert.ToInt32(_currentWindow.Position.Y);
             SD.Rectangle cropRect = new SD.Rectangle(0, 0, Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
 
             SD.Bitmap target = new SD.Bitmap(cropRect.Width, cropRect.Height);
@@ -202,6 +214,8 @@ namespace Screenshots
             CroppedScreenshot.Height = WindowFrame.Height;
 
             CroppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
+
+            _capturedWindow = _currentWindow;
 
             if (CroppedScreenshot.Visibility != Visibility.Visible) CroppedScreenshot.Visibility = Visibility.Visible;
 

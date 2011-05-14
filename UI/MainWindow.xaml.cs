@@ -38,7 +38,12 @@ namespace UI
             if (_fullscreenWindow != null && _fullscreenWindow.IsLoaded) return;
 
             var storage = new ClipboardStorage();
-            _fullscreenWindow = new Screenshots.Fullscreen(storage);
+            _fullscreenWindow = new Screenshots.Fullscreen();
+            _fullscreenWindow.Captured += (s, e) =>
+            {
+                storage.Store(e.CapturedImage);
+            };
+
             _fullscreenWindow.TakeScreenshot();
         }
 
