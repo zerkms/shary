@@ -41,8 +41,9 @@ namespace UI
 
         public void ShowFullscreenWindow()
         {
-            if (_fullscreenWindow == null || !_fullscreenWindow.IsLoaded) _fullscreenWindow = new Screenshots.Fullscreen();
-
+            if (_fullscreenWindow != null && _fullscreenWindow.IsLoaded) return;
+                
+            _fullscreenWindow = new Screenshots.Fullscreen();
             _fullscreenWindow.TakeScreenshot();
         }
 
