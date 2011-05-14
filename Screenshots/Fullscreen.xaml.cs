@@ -30,6 +30,8 @@ namespace Screenshots
         private FindWindows.Window _capturedWindow;
         private SD.Bitmap _imageBitmap;
         public event EventHandler<CapturedScreenshotEventArgs> Captured;
+        private Background _backgroundWindow;
+        private const int backgroundPadding = 30;
 
         public Fullscreen()
         {
@@ -55,15 +57,7 @@ namespace Screenshots
                 case Key.Enter:
                     if (CroppedScreenshot.Visibility != Visibility.Hidden && _capturedWindow != null)
                     {
-                        if (FindWindows.Window.IsDropShadowEnabled)
-                        {
-                            FindWindows.Window.DisableDropShadow();
-                        }
                         this.CaptureScreenshot();
-                        if (FindWindows.Window.IsDropShadowEnabled)
-                        {
-                            FindWindows.Window.EnableDropShadow();
-                        }
                         this.Close();
                     }
                     break;
@@ -86,10 +80,29 @@ namespace Screenshots
             int width = Convert.ToInt32(CroppedScreenshot.Width);
             int height = Convert.ToInt32(CroppedScreenshot.Height);
 
-            _capturedWindow.BringToTop();
+            _backgroundWindow = new Screenshots.Background();
+            _backgroundWindow.Visibility = Visibility.Visible;
+            _backgroundWindow.SetDimensions(x - backgroundPadding, y - backgroundPadding, width + backgroundPadding * 2, height + backgroundPadding * 2);
 
-            BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
-            OnCaptured(new CapturedScreenshotEventArgs(bitmap));
+
+            _backgroundWindow.ContentRendered += (s, e) =>
+            {
+                _capturedWindow.BringToTop();
+
+                if (FindWindows.Window.IsDropShadowEnabled)
+                {
+                    FindWindows.Window.DisableDropShadow();
+                }
+
+                BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
+                OnCaptured(new CapturedScreenshotEventArgs(bitmap));
+                if (FindWindows.Window.IsDropShadowEnabled)
+                {
+                    FindWindows.Window.EnableDropShadow();
+                }
+                _backgroundWindow.Close();
+                _backgroundWindow = null;
+            };
         }
 
         public void SetImage(BitmapSource img)

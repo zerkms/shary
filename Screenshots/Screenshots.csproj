@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -51,6 +54,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Background.xaml.cs">
+      <DependentUpon>Background.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Events\CapturedScreenshotEventArgs.cs" />
     <Compile Include="Fullscreen.xaml.cs">
       <DependentUpon>Fullscreen.xaml</DependentUpon>
@@ -58,6 +64,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Background.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Fullscreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
