@@ -23,6 +23,8 @@ namespace Screenshots
     /// </summary>
     public partial class Fullscreen : Window
     {
+        private List<FindWindows.Window> _windows;
+
         public Fullscreen()
         {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace Screenshots
         public void TakeScreenshot()
         {
             SetImage(TakeAScreenshot());
+            CaptureWindows();
             Show();
             Activate();
         }
@@ -62,6 +65,12 @@ namespace Screenshots
             }
 
             return filteredImage;
+        }
+
+        private void CaptureWindows()
+        {
+            var searcher = new FindWindows.Lookup();
+            _windows = searcher.Find();
         }
 
         public static BitmapSource ToBitmapSource(System.Drawing.Bitmap source)
