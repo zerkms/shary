@@ -44,6 +44,9 @@ namespace FindWindows
          ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool _EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
 
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern bool BringWindowToTop(IntPtr hwnd);
+
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
