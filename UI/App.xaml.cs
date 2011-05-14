@@ -21,10 +21,12 @@ namespace UI
 
         public App()
         {
-            SingleInstanceCheck();
-            InitializeHotKeys();
-            InitializeComponent();
-            InitializeTrayIcon();
+            if (SingleInstanceCheck())
+            {
+                InitializeHotKeys();
+                InitializeComponent();
+                InitializeTrayIcon();
+            }
         }
 
         private void InitializeTrayIcon()
@@ -69,7 +71,7 @@ namespace UI
             };
         }
 
-        private void SingleInstanceCheck()
+        private bool SingleInstanceCheck()
         {
             _singleInstanceMutex = new Mutex(false, "Shary");
 
@@ -88,6 +90,8 @@ namespace UI
                 MessageBox.Show("Shary is already running", "Shary", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown();
             }
+
+            return hasSignal;
         }
     }
 }
