@@ -17,6 +17,7 @@ using System.ComponentModel;
 
 using Hotkeys;
 using System.Windows.Forms;
+using Storages;
 
 namespace UI
 {
@@ -42,8 +43,9 @@ namespace UI
         public void ShowFullscreenWindow()
         {
             if (_fullscreenWindow != null && _fullscreenWindow.IsLoaded) return;
-                
-            _fullscreenWindow = new Screenshots.Fullscreen();
+
+            var storage = new ClipboardStorage();
+            _fullscreenWindow = new Screenshots.Fullscreen(storage);
             _fullscreenWindow.TakeScreenshot();
         }
 
