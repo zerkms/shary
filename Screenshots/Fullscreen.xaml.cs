@@ -16,7 +16,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-namespace Screenshot
+namespace Screenshots
 {
     /// <summary>
     /// Interaction logic for Fullscreen.xaml

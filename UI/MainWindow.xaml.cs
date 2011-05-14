@@ -22,7 +22,7 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Screenshot.Fullscreen _fullscreenWindow;
+        private Screenshots.Fullscreen _fullscreenWindow;
 
         public MainWindow()
         {
@@ -31,7 +31,7 @@ namespace UI
 
         public void ShowFullscreenWindow()
         {
-            if (_fullscreenWindow == null || !_fullscreenWindow.IsLoaded) _fullscreenWindow = new Screenshot.Fullscreen();
+            if (_fullscreenWindow == null || !_fullscreenWindow.IsLoaded) _fullscreenWindow = new Screenshots.Fullscreen();
 
             _fullscreenWindow.TakeScreenshot();
         }

@@ -99,9 +99,13 @@
     <Resource Include="Resources\shary.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Screenshot\Screenshot.csproj">
-      <Project>{89A96029-5157-4DE6-966F-607449956602}</Project>
-      <Name>Screenshot</Name>
+    <ProjectReference Include="..\Hotkeys\Hotkeys.csproj">
+      <Project>{C2C6FC4E-D707-44BA-9358-C38760668960}</Project>
+      <Name>Hotkeys</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Screenshots\Screenshots.csproj">
+      <Project>{E71057AC-550D-45AC-84B1-087FDA99D15D}</Project>
+      <Name>Screenshots</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
