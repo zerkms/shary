@@ -159,8 +159,6 @@ namespace Screenshots
                             SD.GraphicsUnit.Pixel);
             }
 
-
-
             croppedScreenshot.Source = ToBitmapSource(target);
             croppedScreenshot.Width = WindowFrame.Width;
             croppedScreenshot.Height = WindowFrame.Height;
