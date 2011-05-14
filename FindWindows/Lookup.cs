@@ -24,13 +24,11 @@ namespace FindWindows
             if (Winapi.IsWindowVisible(hWnd))
             {
                 var title = Winapi.GetWindowText(hWnd);
-                if (title.Length > 0)
-                {
-                    Winapi.RECT r;
-                    Winapi.GetWindowRect(hWnd, out r);
+                
+                Winapi.RECT r;
+                Winapi.GetWindowRect(hWnd, out r);
 
-                    _windows.Add(new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top), hWnd));
-                }
+                _windows.Add(new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top), hWnd));
             }
 
             return true;
