@@ -5,11 +5,11 @@
         KeyUp="KeyHandler" LostFocus="Window_LostFocus" Deactivated="Window_LostFocus" MouseMove="Window_MouseMove">
     <Grid>
         <Image HorizontalAlignment="Left" Visibility="Hidden" Name="ScreenshotImage" VerticalAlignment="Top" Stretch="None" />
-        <Rectangle Name="WindowFrame" Opacity="0.7" Visibility="Hidden" StrokeThickness="2" Stroke="LightSkyBlue" RadiusX="2" RadiusY="2" VerticalAlignment="Top" HorizontalAlignment="Left"></Rectangle>
         <Rectangle Width="1284" Height="1024" Name="ForegroundRect" Opacity="0.7" Margin="0">
             <Rectangle.Fill>
                 <SolidColorBrush Color="Black"></SolidColorBrush>
             </Rectangle.Fill>
         </Rectangle>
+        <Rectangle Name="WindowFrame" Opacity="1" Visibility="Hidden" StrokeThickness="2" Stroke="LightSkyBlue" RadiusX="2" RadiusY="2" VerticalAlignment="Top" HorizontalAlignment="Left"></Rectangle>
     </Grid>
 </Window>
