@@ -53,7 +53,7 @@ namespace Screenshots
                     break;
                 case Key.Space:
                 case Key.Enter:
-                    if (CroppedScreenshot.Visibility == Visibility.Hidden && _currentWindow != null) _currentWindow.BringToTop();
+                    if (CroppedScreenshot.Visibility != Visibility.Hidden && _currentWindow != null) _currentWindow.BringToTop();
                     this.StoreScreenshot();
                     this.Close();
                     break;
