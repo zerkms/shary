@@ -10,7 +10,7 @@
                 <SolidColorBrush Color="Black"></SolidColorBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Image Name="croppedScreenshot"  Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <Image Name="CroppedScreenshot" Visibility="Hidden" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" />
         <Rectangle Name="WindowFrame" Opacity="1" Visibility="Hidden" StrokeThickness="2" Stroke="LightSkyBlue" RadiusX="2" RadiusY="2" VerticalAlignment="Top" HorizontalAlignment="Left"></Rectangle>
     </Grid>
 </Window>

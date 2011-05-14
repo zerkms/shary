@@ -1,9 +1,9 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media.Imaging;
 
 namespace Storages.Interfaces
 {
     public interface IStorage
     {
-        void Store(Bitmap image);
+        void Store(BitmapSource image);
     }
 }

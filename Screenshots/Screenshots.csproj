@@ -67,6 +67,10 @@
       <Project>{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}</Project>
       <Name>FindWindows</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Storages\Storages.csproj">
+      <Project>{CE713AD1-3066-4AD1-87BF-87D982909C18}</Project>
+      <Name>Storages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
