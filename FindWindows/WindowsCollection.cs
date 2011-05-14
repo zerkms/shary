@@ -8,14 +8,6 @@ namespace FindWindows
     {
         public Window Find(Point point)
         {
-            foreach (var w in this)
-            {
-                if (point.X >= w.Position.X &&
-                point.Y >= w.Position.Y &&
-                point.X <= w.BottomRight.X &&
-                point.Y <= w.BottomRight.Y) return w;
-            }
-
             return this.Where(i =>
                 point.X >= i.Position.X &&
                 point.Y >= i.Position.Y &&

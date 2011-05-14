@@ -16,18 +16,7 @@ namespace FindWindows
         public string Title { get { return _title; } }
         public IntPtr Hwnd { get { return _hwnd;  } }
 
-        public Point BottomRight
-        {
-            get
-            {
-                if (_bottomRight == new Point(0, 0))
-                {
-                    _bottomRight = new Point(_position.X + _size.Width, _position.Y + _size.Height);
-                }
-
-                return _bottomRight;
-            }
-        }
+        public Point BottomRight { get { return _bottomRight; } }
 
         public Window(string title, Point position, Size size, IntPtr hwnd)
         {
@@ -35,6 +24,8 @@ namespace FindWindows
             _position = position;
             _size = size;
             _hwnd = hwnd;
+
+            _bottomRight = new Point(_position.X + _size.Width, _position.Y + _size.Height);
         }
     }
 }
