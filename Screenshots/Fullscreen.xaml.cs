@@ -210,27 +210,26 @@ namespace Screenshots
             int y = Convert.ToInt32(_currentWindow.Position.Y);
             SD.Rectangle cropRect = new SD.Rectangle(0, 0, Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
 
-            SD.Bitmap target = new SD.Bitmap(cropRect.Width, cropRect.Height);
-
-            using (SD.Graphics g = SD.Graphics.FromImage(target))
+            using (var target = new SD.Bitmap(cropRect.Width, cropRect.Height))
             {
-                g.DrawImage(_imageBitmap,
-                            cropRect,
-                            new SD.Rectangle(Convert.ToInt32(_currentWindow.Position.X), Convert.ToInt32(_currentWindow.Position.Y), target.Width, target.Height),
-                            SD.GraphicsUnit.Pixel);
+                using (SD.Graphics g = SD.Graphics.FromImage(target))
+                {
+                    g.DrawImage(_imageBitmap,
+                                cropRect,
+                                new SD.Rectangle(Convert.ToInt32(_currentWindow.Position.X), Convert.ToInt32(_currentWindow.Position.Y), target.Width, target.Height),
+                                SD.GraphicsUnit.Pixel);
+                }
+
+                CroppedScreenshot.Source = ToBitmapSource(target);
+                CroppedScreenshot.Width = WindowFrame.Width;
+                CroppedScreenshot.Height = WindowFrame.Height;
+
+                CroppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
+
+                _capturedWindow = _currentWindow;
+
+                if (CroppedScreenshot.Visibility != Visibility.Visible) CroppedScreenshot.Visibility = Visibility.Visible;
             }
-
-            CroppedScreenshot.Source = ToBitmapSource(target);
-            CroppedScreenshot.Width = WindowFrame.Width;
-            CroppedScreenshot.Height = WindowFrame.Height;
-
-            CroppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
-
-            _capturedWindow = _currentWindow;
-
-            if (CroppedScreenshot.Visibility != Visibility.Visible) CroppedScreenshot.Visibility = Visibility.Visible;
-
-            target.Dispose();
         }
     }
 }
