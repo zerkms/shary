@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotkeys", "Hotkeys\Hotkeys.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Screenshots", "Screenshots\Screenshots.csproj", "{E71057AC-550D-45AC-84B1-087FDA99D15D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindWindows", "FindWindows\FindWindows.csproj", "{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{E71057AC-550D-45AC-84B1-087FDA99D15D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E71057AC-550D-45AC-84B1-087FDA99D15D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E71057AC-550D-45AC-84B1-087FDA99D15D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4BEEFBE1-8763-4CBE-9906-2ABE64166EC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
