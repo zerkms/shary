@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
 
 namespace FindWindows
 {
     public class Lookup
     {
-        private static List<Window> _windows;
+        private static WindowsCollection _windows;
 
-        public List<Window> Find()
+        public WindowsCollection Find()
         {
-            _windows = new List<Window>();
+            _windows = new WindowsCollection();
 
             var enumfunc = new Winapi.EnumDelegate(EnumWindowsProc);
             IntPtr hDesktop = IntPtr.Zero; // current desktop
@@ -29,7 +29,7 @@ namespace FindWindows
                     Winapi.RECT r;
                     Winapi.GetWindowRect(hWnd, out r);
 
-                    _windows.Add(new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top)));
+                    _windows.Add(new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top), hWnd));
                 }
             }
 

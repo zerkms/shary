@@ -12,7 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
@@ -23,7 +22,9 @@ namespace Screenshots
     /// </summary>
     public partial class Fullscreen : Window
     {
-        private List<FindWindows.Window> _windows;
+        private FindWindows.WindowsCollection _windows;
+        private FindWindows.Window _currentWindow;
+        private int _currentWindowFrame;
 
         public Fullscreen()
         {
@@ -31,6 +32,14 @@ namespace Screenshots
 
             ForegroundRect.Width = SystemParameters.PrimaryScreenWidth;
             ForegroundRect.Height = SystemParameters.PrimaryScreenHeight;
+        }
+
+        private void KeyHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         public void SetImage(BitmapSource img)
@@ -55,9 +64,9 @@ namespace Screenshots
         {
             BitmapSource filteredImage;
 
-            using (var bitmap = new Bitmap(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)))
+            using (var bitmap = new System.Drawing.Bitmap(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)))
             {
-                using (var graphics = Graphics.FromImage(bitmap))
+                using (var graphics = System.Drawing.Graphics.FromImage(bitmap))
                 {
                     graphics.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight)));
                 }
@@ -98,5 +107,31 @@ namespace Screenshots
         [DllImport("gdi32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool DeleteObject(IntPtr hObject);
+
+        private void Window_LostFocus(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Close();
+            }
+            catch (InvalidOperationException) { }
+        }
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            var window = _windows.Find(e.GetPosition(ScreenshotImage));
+
+            if (window == null) return;
+
+            if (_currentWindow != null && _currentWindow.Hwnd == window.Hwnd) return;
+
+            _currentWindow = window;
+
+            WindowFrame.Width = window.Size.Width;
+            WindowFrame.Height = window.Size.Height;
+            WindowFrame.Margin = new Thickness(window.Position.X, window.Position.Y, 0, 0);
+
+            if (WindowFrame.Visibility != Visibility.Visible) WindowFrame.Visibility = Visibility.Visible;
+        }
     }
 }
