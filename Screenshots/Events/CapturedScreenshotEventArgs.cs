@@ -9,7 +9,7 @@ namespace Screenshots.Events
     public class CapturedScreenshotEventArgs: EventArgs
     {
         public readonly BitmapSource CapturedImage;
-        public readonly decimal NewPrice;
+
         public CapturedScreenshotEventArgs(BitmapSource capturedImage)
         {
             CapturedImage = capturedImage;

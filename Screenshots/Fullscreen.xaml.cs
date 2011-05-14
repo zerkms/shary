@@ -31,7 +31,6 @@ namespace Screenshots
         private SD.Bitmap _imageBitmap;
         public event EventHandler<CapturedScreenshotEventArgs> Captured;
         private Background _backgroundWindow;
-        private const int backgroundPadding = 30;
 
         public Fullscreen()
         {
@@ -82,8 +81,7 @@ namespace Screenshots
 
             _backgroundWindow = new Screenshots.Background();
             _backgroundWindow.Visibility = Visibility.Visible;
-            _backgroundWindow.SetDimensions(x - backgroundPadding, y - backgroundPadding, width + backgroundPadding * 2, height + backgroundPadding * 2);
-
+            _backgroundWindow.SetDimensions(x, y, width, height);
 
             _backgroundWindow.ContentRendered += (s, e) =>
             {
