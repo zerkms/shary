@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="Effects\EffectBackground.cs" />
     <Compile Include="Effects\EffectScreenshot.cs" />
+    <Compile Include="Effects\EffectTransparentScreenshot.cs" />
     <Compile Include="Events\CapturedScreenshotEventArgs.cs" />
     <Compile Include="Events\FilterEventArgs.cs" />
     <Compile Include="Fullscreen.xaml.cs">

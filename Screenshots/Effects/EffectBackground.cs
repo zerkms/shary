@@ -11,6 +11,11 @@ namespace Screenshots.Effects
         private Background _background;
         private int _x, _y, _width, _height;
 
+        public int X { get { return _x; } }
+        public int Y { get { return _y; } }
+        public int Width { get { return _width; } }
+        public int Height { get { return _height; } }
+
         public event EventHandler<CapturedScreenshotEventArgs> Filtered;
 
         public void OnFiltered(CapturedScreenshotEventArgs e)

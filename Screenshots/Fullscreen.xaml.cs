@@ -103,7 +103,8 @@ namespace Screenshots
             background.SetBackground(new SolidColorBrush(Colors.White));
             /*this.Filtered += background.Process;*/
 
-            var screenshot = new EffectScreenshot(this, _capturedWindow, x, y, width, height, background);
+            //var screenshot = new EffectScreenshot(this, _capturedWindow, x, y, width, height, background);
+            var screenshot = new EffectTransparentScreenshot(this, _capturedWindow, x, y, width, height, background);
             this.Filtered += screenshot.Process;
 
             screenshot.Filtered += (s, e) => OnCaptured(new CapturedScreenshotEventArgs(e.CapturedImage));
