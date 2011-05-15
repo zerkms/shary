@@ -180,11 +180,13 @@ namespace Screenshots
 
         private void Window_LostFocus(object sender, EventArgs e)
         {
-            try
-            {
-                this.Close();
-            }
-            catch (InvalidOperationException) { }
+            this.Close();
+        }
+
+        private void Window_Closing(object sender, EventArgs e)
+        {
+            Deactivated -= Window_LostFocus;
+            LostFocus -= Window_LostFocus;
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
