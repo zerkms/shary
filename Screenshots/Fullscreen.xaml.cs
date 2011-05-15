@@ -9,6 +9,7 @@ using System.ComponentModel;
 using SD = System.Drawing;
 using Screenshots.Events;
 using System.Threading;
+using System.IO;
 
 namespace Screenshots
 {
@@ -20,7 +21,7 @@ namespace Screenshots
         private FindWindows.WindowsCollection _windows;
         private FindWindows.Window _currentWindow;
         private FindWindows.Window _capturedWindow;
-        private SD.Bitmap _imageBitmap;
+        private BitmapSource _imageBitmap;
         public event EventHandler<CapturedScreenshotEventArgs> Captured;
         private Background _backgroundWindow;
 
@@ -30,11 +31,6 @@ namespace Screenshots
 
             ForegroundRect.Width = SystemParameters.PrimaryScreenWidth;
             ForegroundRect.Height = SystemParameters.PrimaryScreenHeight;
-
-            Closed += (e, s) =>
-            {
-                _imageBitmap.Dispose();
-            };
         }
 
         private void KeyHandler(object sender, KeyEventArgs e)
@@ -122,20 +118,24 @@ namespace Screenshots
 
         private BitmapSource TakeAScreenshot()
         {
-            return TakeAScreenshot(0, 0, Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight));
+            var result = TakeAScreenshot(0, 0, Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight));
+            _imageBitmap = result;
+
+            return result;
         }
 
         private BitmapSource TakeAScreenshot(int x, int y, int width, int height)
         {
             BitmapSource filteredImage;
 
-            _imageBitmap = new SD.Bitmap(width, height);
-
-            using (var graphics = SD.Graphics.FromImage(_imageBitmap))
+            using (var image = new SD.Bitmap(width, height))
             {
-                graphics.CopyFromScreen(x, y, 0, 0, new SD.Size(width, height));
+                using (var graphics = SD.Graphics.FromImage(image))
+                {
+                    graphics.CopyFromScreen(x, y, 0, 0, new SD.Size(width, height));
+                }
+                filteredImage = ToBitmapSource(image);
             }
-            filteredImage = ToBitmapSource(_imageBitmap);
 
             return filteredImage;
         }
@@ -204,28 +204,19 @@ namespace Screenshots
         {
             int x = Convert.ToInt32(_currentWindow.Position.X);
             int y = Convert.ToInt32(_currentWindow.Position.Y);
-            SD.Rectangle cropRect = new SD.Rectangle(0, 0, Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
 
-            using (var target = new SD.Bitmap(cropRect.Width, cropRect.Height))
-            {
-                using (SD.Graphics g = SD.Graphics.FromImage(target))
-                {
-                    g.DrawImage(_imageBitmap,
-                                cropRect,
-                                new SD.Rectangle(Convert.ToInt32(_currentWindow.Position.X), Convert.ToInt32(_currentWindow.Position.Y), target.Width, target.Height),
-                                SD.GraphicsUnit.Pixel);
-                }
+            var rect = new Int32Rect(Convert.ToInt32(_currentWindow.Position.X), Convert.ToInt32(_currentWindow.Position.Y), Convert.ToInt32(WindowFrame.Width), Convert.ToInt32(WindowFrame.Height));
+            var croppedBitmap = new CroppedBitmap(_imageBitmap, rect);
 
-                CroppedScreenshot.Source = ToBitmapSource(target);
-                CroppedScreenshot.Width = WindowFrame.Width;
-                CroppedScreenshot.Height = WindowFrame.Height;
+            CroppedScreenshot.Source = croppedBitmap;
+            CroppedScreenshot.Width = WindowFrame.Width;
+            CroppedScreenshot.Height = WindowFrame.Height;
 
-                CroppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
+            CroppedScreenshot.Margin = new Thickness(_currentWindow.Position.X, _currentWindow.Position.Y, 0, 0);
 
-                _capturedWindow = _currentWindow;
+            _capturedWindow = _currentWindow;
 
-                if (CroppedScreenshot.Visibility != Visibility.Visible) CroppedScreenshot.Visibility = Visibility.Visible;
-            }
+            if (CroppedScreenshot.Visibility != Visibility.Visible) CroppedScreenshot.Visibility = Visibility.Visible;
         }
     }
 }
