@@ -1,0 +1,6 @@
+﻿namespace Screenshots
+{
+    class TransparencyCalc
+    {
+    }
+}

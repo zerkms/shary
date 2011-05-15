@@ -9,7 +9,8 @@ using System.ComponentModel;
 using SD = System.Drawing;
 using Screenshots.Events;
 using System.Threading;
-using System.IO;
+
+using Screenshots.Effects;
 
 namespace Screenshots
 {
@@ -24,6 +25,8 @@ namespace Screenshots
         private BitmapSource _imageBitmap;
         public event EventHandler<CapturedScreenshotEventArgs> Captured;
         private Background _backgroundWindow;
+
+        private bool _handleShadow = true;
 
         public Fullscreen()
         {
@@ -44,6 +47,7 @@ namespace Screenshots
                 case Key.Enter:
                     if (CroppedScreenshot.Visibility != Visibility.Hidden && _capturedWindow != null)
                     {
+                        this.Hide();
                         this.CaptureScreenshot();
                         this.Close();
                     }
@@ -62,45 +66,41 @@ namespace Screenshots
 
         private void CaptureScreenshot()
         {
-            int x = Convert.ToInt32(CroppedScreenshot.Margin.Left);
-            int y = Convert.ToInt32(CroppedScreenshot.Margin.Top);
-            int width = Convert.ToInt32(CroppedScreenshot.Width);
-            int height = Convert.ToInt32(CroppedScreenshot.Height);
+            int x = Convert.ToInt32(_capturedWindow.Position.X);
+            int y = Convert.ToInt32(_capturedWindow.Position.Y);
+            int width = Convert.ToInt32(_capturedWindow.Size.Width);
+            int height = Convert.ToInt32(_capturedWindow.Size.Height);
 
             _backgroundWindow = new Screenshots.Background();
             _backgroundWindow.Visibility = Visibility.Visible;
             _backgroundWindow.SetDimensions(x, y, width, height);
+            _backgroundWindow.Background = new SolidColorBrush(Colors.Black);
 
             _backgroundWindow.ContentRendered += (s, e) =>
             {
+                
                 _capturedWindow.BringToTop();
-
-                if (FindWindows.Window.IsDropShadowEnabled)
-                {
-                    FindWindows.Window.DisableDropShadow();
-                }
 
                 Thread.Sleep(100);
 
                 BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
                 OnCaptured(new CapturedScreenshotEventArgs(bitmap));
-                if (FindWindows.Window.IsDropShadowEnabled)
-                {
-                    FindWindows.Window.EnableDropShadow();
-                }
+                        
                 _backgroundWindow.Close();
                 _backgroundWindow = null;
             };
+
+            /*
+            var filterChain = new Chain();
+            filterChain.Register(new EffectBackground(x, y, width, height));
+            filterChain.Register(new EffectScreenshot(this, _capturedWindow, x, y, width, height));
+            var bitmap = filterChain.Run();
+            OnCaptured(new CapturedScreenshotEventArgs(bitmap));*/
         }
 
         public void SetImage(BitmapSource img)
         {
             ScreenshotImage.Source = img;
-        }
-
-        public ImageSource GetImage()
-        {
-            return ScreenshotImage.Source;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -110,13 +110,13 @@ namespace Screenshots
 
         public void TakeScreenshot()
         {
-            SetImage(TakeAScreenshot());
+            SetImage(TakeFullScreenshot());
             CaptureWindows();
             Show();
             Activate();
         }
 
-        private BitmapSource TakeAScreenshot()
+        private BitmapSource TakeFullScreenshot()
         {
             var result = TakeAScreenshot(0, 0, Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth), Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight));
             _imageBitmap = result;
@@ -124,7 +124,7 @@ namespace Screenshots
             return result;
         }
 
-        private BitmapSource TakeAScreenshot(int x, int y, int width, int height)
+        public BitmapSource TakeAScreenshot(int x, int y, int width, int height)
         {
             BitmapSource filteredImage;
 
@@ -177,7 +177,18 @@ namespace Screenshots
             this.Close();
         }
 
+        public new void Hide()
+        {
+            DetachLostfocusClose();
+            base.Hide();
+        }
+
         private void Window_Closing(object sender, EventArgs e)
+        {
+            DetachLostfocusClose();
+        }
+
+        private void DetachLostfocusClose()
         {
             Deactivated -= Window_LostFocus;
             LostFocus -= Window_LostFocus;

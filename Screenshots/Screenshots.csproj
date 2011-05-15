@@ -57,11 +57,16 @@
     <Compile Include="Background.xaml.cs">
       <DependentUpon>Background.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Effects\Chain.cs" />
+    <Compile Include="Effects\EffectBackground.cs" />
+    <Compile Include="Effects\EffectScreenshot.cs" />
+    <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Events\CapturedScreenshotEventArgs.cs" />
     <Compile Include="Fullscreen.xaml.cs">
       <DependentUpon>Fullscreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransparencyCalc.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Background.xaml">
@@ -83,6 +88,7 @@
       <Name>Storages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
