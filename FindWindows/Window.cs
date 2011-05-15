@@ -22,12 +22,33 @@ namespace FindWindows
 
         public Window(string title, Point position, Size size, IntPtr hwnd)
         {
+            CorrectBoundaries(ref position, ref size);
+
             _title = title;
             _position = position;
             _size = size;
             _hwnd = hwnd;
 
             _bottomRight = new Point(_position.X + _size.Width, _position.Y + _size.Height);
+        }
+
+        private void CorrectBoundaries(ref Point position, ref Size size)
+        {
+            if (position.X < 0 && position.X > -1000)
+            {
+                size.Width += position.X;
+                position.X = 0;
+            }
+            if (position.Y < 0 && position.Y > -1000)
+            {
+                size.Height += position.Y;
+                position.Y = 0;
+            }
+
+            if (position.X + size.Width > SystemParameters.PrimaryScreenWidth)
+            {
+                size.Width = SystemParameters.PrimaryScreenWidth - position.X;
+            }
         }
 
         static Window()
