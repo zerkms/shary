@@ -20,13 +20,17 @@ namespace Screenshots.Effects
                 handler(this, e);
         }
 
-        public EffectBackground(int x, int y, int width, int height, Brush brush)
+        public EffectBackground(int x, int y, int width, int height)
         {
             _background = new Background();
             _x = x;
             _y = y;
             _width = width;
             _height = height;
+        }
+
+        public void SetBackground(Brush brush)
+        {
             _background.Background = brush;
         }
 
