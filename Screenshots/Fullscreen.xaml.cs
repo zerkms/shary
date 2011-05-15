@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using SD = System.Drawing;
-using Storages.Interfaces;
 using Screenshots.Events;
+using System.Threading;
 
 namespace Screenshots
 {
@@ -91,6 +83,8 @@ namespace Screenshots
                 {
                     FindWindows.Window.DisableDropShadow();
                 }
+
+                Thread.Sleep(100);
 
                 BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
                 OnCaptured(new CapturedScreenshotEventArgs(bitmap));
