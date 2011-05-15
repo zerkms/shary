@@ -24,6 +24,7 @@ namespace Screenshots
         private FindWindows.Window _capturedWindow;
         private BitmapSource _imageBitmap;
         public event EventHandler<CapturedScreenshotEventArgs> Captured;
+        public event EventHandler<CapturedScreenshotEventArgs> Filtered;
         private Background _backgroundWindow;
 
         private bool _handleShadow = true;
@@ -64,6 +65,13 @@ namespace Screenshots
                 handler(this, e);
         }
 
+        public void OnFiltered(CapturedScreenshotEventArgs e)
+        {
+            EventHandler<CapturedScreenshotEventArgs> handler = this.Filtered;
+            if (handler != null)
+                handler(this, e);
+        }
+
         private void CaptureScreenshot()
         {
             int x = Convert.ToInt32(_capturedWindow.Position.X);
@@ -71,6 +79,7 @@ namespace Screenshots
             int width = Convert.ToInt32(_capturedWindow.Size.Width);
             int height = Convert.ToInt32(_capturedWindow.Size.Height);
 
+            /*
             _backgroundWindow = new Screenshots.Background();
             _backgroundWindow.Visibility = Visibility.Visible;
             _backgroundWindow.SetDimensions(x, y, width, height);
@@ -88,14 +97,17 @@ namespace Screenshots
                         
                 _backgroundWindow.Close();
                 _backgroundWindow = null;
-            };
+            };*/
 
-            /*
-            var filterChain = new Chain();
-            filterChain.Register(new EffectBackground(x, y, width, height));
-            filterChain.Register(new EffectScreenshot(this, _capturedWindow, x, y, width, height));
-            var bitmap = filterChain.Run();
-            OnCaptured(new CapturedScreenshotEventArgs(bitmap));*/
+            var background = new EffectBackground(x, y, width, height, new SolidColorBrush(Colors.White));
+            this.Filtered += background.Process;
+
+            var screenshot = new EffectScreenshot(this, _capturedWindow, x, y, width, height);
+            background.Filtered += screenshot.Process;
+
+            screenshot.Filtered += (s, e) => OnCaptured(new CapturedScreenshotEventArgs(e.CapturedImage));
+
+            OnFiltered(null);
         }
 
         public void SetImage(BitmapSource img)

@@ -57,11 +57,10 @@
     <Compile Include="Background.xaml.cs">
       <DependentUpon>Background.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Effects\Chain.cs" />
     <Compile Include="Effects\EffectBackground.cs" />
     <Compile Include="Effects\EffectScreenshot.cs" />
-    <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Events\CapturedScreenshotEventArgs.cs" />
+    <Compile Include="Events\FilterEventArgs.cs" />
     <Compile Include="Fullscreen.xaml.cs">
       <DependentUpon>Fullscreen.xaml</DependentUpon>
     </Compile>
