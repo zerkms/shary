@@ -209,6 +209,8 @@ namespace Screenshots
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
+            if (!this.IsActive) Activate();
+
             var window = _windows.Find(e.GetPosition(ScreenshotImage));
 
             if (window == null) return;
