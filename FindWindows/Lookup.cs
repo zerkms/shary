@@ -7,6 +7,7 @@ namespace FindWindows
     public class Lookup
     {
         private static WindowsCollection _windows;
+        private static Window _taskbarWindow;
 
         public WindowsCollection Find()
         {
@@ -28,7 +29,22 @@ namespace FindWindows
                 Winapi.RECT r;
                 Winapi.GetWindowRect(hWnd, out r);
 
-                _windows.Add(new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top), hWnd));
+                var window = new Window(title, new Point(r.Left, r.Top), new Size(r.Right - r.Left, r.Bottom - r.Top), hWnd);
+
+                _windows.Add(window);
+
+                if (_taskbarWindow == null)
+                {
+                    var classname = Winapi.GetWindowClassName(hWnd);
+                    if (classname == "Shell_TrayWnd")
+                    {
+                        _taskbarWindow = window;
+                    }
+                }
+                else
+                {
+                    window.CropWithAnotherWindow(_taskbarWindow);
+                }
             }
 
             return true;

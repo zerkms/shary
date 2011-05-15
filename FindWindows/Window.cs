@@ -29,6 +29,11 @@ namespace FindWindows
             _size = size;
             _hwnd = hwnd;
 
+            RecalculateBottomRight();
+        }
+
+        private void RecalculateBottomRight()
+        {
             _bottomRight = new Point(_position.X + _size.Width, _position.Y + _size.Height);
         }
 
@@ -79,5 +84,13 @@ namespace FindWindows
             return isEnabled;
         }
 
+        public void CropWithAnotherWindow(Window window)
+        {
+            if (window.Position.Y > this.Position.Y && window.Position.Y < this.BottomRight.Y)
+            {
+                _size.Height = window.Position.Y - this.Position.Y;
+                RecalculateBottomRight();
+            }
+        }
     }
 }
