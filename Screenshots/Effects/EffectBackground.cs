@@ -46,8 +46,6 @@ namespace Screenshots.Effects
 
             _background.ContentRendered += (s, e) =>
                 {
-                    //System.Threading.Thread.Sleep(1000);
-
                     OnFiltered(null);
 
                     _background.Close();

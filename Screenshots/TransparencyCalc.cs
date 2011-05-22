@@ -64,12 +64,10 @@ namespace Screenshots
                 var r1 = white[i + 2];
 
                 var g0 = black[i + 1];
-                var g1 = white[i + 1];
 
                 var b0 = black[i];
-                var b1 = white[i];
 
-                var AS = Math.Min((r0 - r1 + 255) / 255.0, 1.0);
+                var AS = r0 - r1 + 255;
 
                 if (AS == 0)
                 {
@@ -77,10 +75,11 @@ namespace Screenshots
                 }
                 else
                 {
-                    result[i] = Convert.ToByte(Math.Min(255, b0 / AS));
-                    result[i + 1] = Convert.ToByte(Math.Min(255, g0 / AS));
-                    result[i + 2] = Convert.ToByte(Math.Min(255, r0 / AS));
-                    result[i + 3] = Convert.ToByte(AS * 255);
+                    var ASP = AS / 255.0;
+                    result[i] = Convert.ToByte(Math.Min(255, b0 / ASP));
+                    result[i + 1] = Convert.ToByte(Math.Min(255, g0 / ASP));
+                    result[i + 2] = Convert.ToByte(Math.Min(255, r0 / ASP));
+                    result[i + 3] = Convert.ToByte(AS);
                 }
             }
 

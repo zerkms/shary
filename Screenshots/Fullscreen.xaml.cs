@@ -79,32 +79,10 @@ namespace Screenshots
             int width = Convert.ToInt32(_capturedWindow.Size.Width);
             int height = Convert.ToInt32(_capturedWindow.Size.Height);
 
-            /*
-            _backgroundWindow = new Screenshots.Background();
-            _backgroundWindow.Visibility = Visibility.Visible;
-            _backgroundWindow.SetDimensions(x, y, width, height);
-            _backgroundWindow.Background = new SolidColorBrush(Colors.Black);
-
-            _backgroundWindow.ContentRendered += (s, e) =>
-            {
-                
-                _capturedWindow.BringToTop();
-
-                Thread.Sleep(100);
-
-                BitmapSource bitmap = TakeAScreenshot(x, y, width, height);
-                OnCaptured(new CapturedScreenshotEventArgs(bitmap));
-                        
-                _backgroundWindow.Close();
-                _backgroundWindow = null;
-            };*/
-
             var background = new EffectBackground(x, y, width, height);
             background.SetBackground(new SolidColorBrush(Colors.White));
-            /*this.Filtered += background.Process;*/
 
-            //var screenshot = new EffectScreenshot(this, _capturedWindow, x, y, width, height, background);
-            var screenshot = new EffectTransparentScreenshot(this, _capturedWindow, x, y, width, height, background);
+            var screenshot = new EffectScreenshot(this, _capturedWindow, x, y, width, height, background);
             this.Filtered += screenshot.Process;
 
             screenshot.Filtered += (s, e) => OnCaptured(new CapturedScreenshotEventArgs(e.CapturedImage));
