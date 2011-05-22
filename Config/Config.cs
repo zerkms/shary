@@ -17,6 +17,11 @@ namespace Configuration
             get { return _config.GetSection("Hotkeys") as HotkeysSection; }
         }
 
+        public StoragesSection Storages
+        {
+            get { return _config.GetSection("Storages") as StoragesSection; }
+        }
+
         public Config(string configPath)
         {
             CreateConfigDir(configPath);

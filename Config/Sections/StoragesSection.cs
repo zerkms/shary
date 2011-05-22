@@ -6,7 +6,7 @@ using System.Configuration;
 
 namespace Configuration
 {
-    class StoragesSection : ConfigurationSection
+    public class StoragesSection : ConfigurationSection
     {
         [ConfigurationProperty("Current", IsRequired = true, DefaultValue = "Clipboard")]
         public string Current

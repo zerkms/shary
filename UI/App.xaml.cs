@@ -27,6 +27,7 @@ namespace UI
         private Mutex _singleInstanceMutex;
 
         private Config _config;
+        public Config Config { get { return _config; } }
 
         public App()
         {

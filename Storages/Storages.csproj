@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -44,8 +45,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClipboardStorage.cs" />
+    <Compile Include="Factory.cs" />
     <Compile Include="Interfaces\IStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Config\Configuration.csproj">
+      <Project>{3D1D8595-EFC1-4268-9863-22DED927E447}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

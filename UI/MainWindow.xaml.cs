@@ -19,6 +19,8 @@ using Hotkeys;
 using System.Windows.Forms;
 using Storages;
 
+using Configuration;
+
 namespace UI
 {
     /// <summary>
@@ -27,17 +29,26 @@ namespace UI
     public partial class MainWindow : Window
     {
         private Screenshots.Fullscreen _fullscreenWindow;
+        private Config _config;
 
         public MainWindow()
         {
             InitializeComponent();
+            _config = ((App)App.Current).Config;
+        }
+
+        public void SetConfig(Config config)
+        {
+            _config = config;
         }
 
         public void ShowFullscreenWindow()
         {
             if (_fullscreenWindow != null && _fullscreenWindow.IsLoaded) return;
 
-            var storage = new ClipboardStorage();
+            var factory = new Factory();
+            var storage = factory.Storage(_config);
+
             _fullscreenWindow = new Screenshots.Fullscreen();
             _fullscreenWindow.Captured += (s, e) =>
             {
