@@ -99,6 +99,10 @@
     <Resource Include="Resources\shary.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Config\Configuration.csproj">
+      <Project>{3D1D8595-EFC1-4268-9863-22DED927E447}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hotkeys\Hotkeys.csproj">
       <Project>{C2C6FC4E-D707-44BA-9358-C38760668960}</Project>
       <Name>Hotkeys</Name>

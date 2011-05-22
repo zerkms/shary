@@ -6,6 +6,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Threading;
+using System.IO;
+
+using Configuration;
 
 namespace UI
 {
@@ -14,19 +17,29 @@ namespace UI
     /// </summary>
     public partial class App : Application
     {
+        private const string APPLICATION_NAME = "Shary";
+
         private HotKey _sshHotkey;
         private System.Windows.Forms.NotifyIcon _niNotifyIcon;
         private System.Windows.Forms.ContextMenuStrip _mnuStripMenu;
         private Mutex _singleInstanceMutex;
 
+        private Config _config;
+
         public App()
         {
             if (SingleInstanceCheck())
             {
+                InitializeConfig();
                 InitializeHotKeys();
                 InitializeComponent();
                 InitializeTrayIcon();
             }
+        }
+
+        private void InitializeConfig()
+        {
+            _config = new Config(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), APPLICATION_NAME));
         }
 
         private void InitializeTrayIcon()
