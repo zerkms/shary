@@ -42,6 +42,7 @@ namespace UI
             _fullscreenWindow.Captured += (s, e) =>
             {
                 storage.Store(e.CapturedImage);
+                image1.Source = e.CapturedImage;
             };
 
             _fullscreenWindow.TakeScreenshot();
@@ -50,6 +51,11 @@ namespace UI
         private void TakeScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
             ShowFullscreenWindow();
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            this.Background = new System.Windows.Media.SolidColorBrush(Colors.Green);
         }
     }
 }
