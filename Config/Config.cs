@@ -64,13 +64,23 @@ namespace Configuration
                 hotkeys.SectionInformation.ForceSave = true;
                 config.Sections.Add("Hotkeys", hotkeys);
             }
+            else
+            {
 
-            hotkeys = config.Sections["Hotkeys"] as HotkeysSection;
+                hotkeys = config.Sections["Hotkeys"] as HotkeysSection;
+            }
 
             if (hotkeys.Select.Key == "")
             {
-                hotkeys.Select.Key = "R";
-                hotkeys.Select.Modifiers = "Alt+Shift";
+                hotkeys.Select = new HotkeyElement("R", "Alt+Shift");
+            }
+
+            StoragesSection storages;
+            if (config.GetSection("Storages") == null)
+            {
+                storages = new StoragesSection();
+                storages.SectionInformation.ForceSave = true;
+                config.Sections.Add("Storages", storages);
             }
         }
     }

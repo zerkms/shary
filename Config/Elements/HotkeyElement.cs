@@ -12,9 +12,10 @@ namespace Configuration
         {
         }
 
-        public HotkeyElement(string key)
+        public HotkeyElement(string key, string modifier)
         {
             Key = key;
+            Modifiers = modifier;
         }
 
         [ConfigurationProperty("Key", IsRequired = false)]
