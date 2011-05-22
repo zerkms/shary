@@ -10,6 +10,8 @@ using System.IO;
 
 using Configuration;
 
+using SWF = System.Windows.Forms;
+
 namespace UI
 {
     /// <summary>
@@ -75,7 +77,10 @@ namespace UI
 
         private void InitializeHotKeys()
         {
-            _sshHotkey = new HotKey(ModifierKeys.Alt | ModifierKeys.Shift, System.Windows.Forms.Keys.R);
+            var kc = new SWF.KeysConverter();
+            var mkc = new ModifierKeysConverter();
+
+            _sshHotkey = new HotKey((ModifierKeys)mkc.ConvertFromString(_config.Hotkeys.Select.Modifiers), (SWF.Keys)kc.ConvertFromString(_config.Hotkeys.Select.Key));
             _sshHotkey.HotKeyPressed += k => ((MainWindow)this.MainWindow).ShowFullscreenWindow();
 
             Exit += (s, e) =>

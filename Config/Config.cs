@@ -12,6 +12,11 @@ namespace Configuration
     {
         private System.Configuration.Configuration _config;
 
+        public HotkeysSection Hotkeys
+        {
+            get { return _config.GetSection("Hotkeys") as HotkeysSection; }
+        }
+
         public Config(string configPath)
         {
             CreateConfigDir(configPath);
@@ -19,6 +24,10 @@ namespace Configuration
             var configFile = Path.Combine(configPath, "config.xml");
 
             _config = GetFileConfig(configFile);
+
+            Init(_config);
+
+            _config.Save(ConfigurationSaveMode.Modified);
         }
 
         private void CreateConfigDir(string configPath)
@@ -27,7 +36,7 @@ namespace Configuration
                 Directory.CreateDirectory(configPath);
         }
 
-        private static System.Configuration.Configuration GetFileConfig(string path)
+        private System.Configuration.Configuration GetFileConfig(string path)
         {
             if (!File.Exists(path))
             {
@@ -44,6 +53,25 @@ namespace Configuration
 
             ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap { ExeConfigFilename = path };
             return ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+        }
+
+        private void Init(System.Configuration.Configuration config)
+        {
+            HotkeysSection hotkeys;
+            if (config.GetSection("Hotkeys") == null)
+            {
+                hotkeys = new HotkeysSection();
+                hotkeys.SectionInformation.ForceSave = true;
+                config.Sections.Add("Hotkeys", hotkeys);
+            }
+
+            hotkeys = config.Sections["Hotkeys"] as HotkeysSection;
+
+            if (hotkeys.Select.Key == "")
+            {
+                hotkeys.Select.Key = "R";
+                hotkeys.Select.Modifiers = "Alt+Shift";
+            }
         }
     }
 }
