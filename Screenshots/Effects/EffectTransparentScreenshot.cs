@@ -50,7 +50,6 @@ namespace Screenshots.Effects
             EventHandler<CapturedScreenshotEventArgs> actionWhite = (s, e) =>
             {
                 _white = GetScreenshot();
-                _effectBackground.SetBackground(new SolidColorBrush(Colors.Black));
 
                 _effectBackgroundBlack.Process(this, image);
             };
