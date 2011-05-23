@@ -67,7 +67,7 @@ namespace Screenshots
 
                 var b0 = black[i];
 
-                var AS = r0 - r1 + 255;
+                var AS = Math.Min(r0 - r1 + 255, 255);
 
                 if (AS == 0)
                 {
